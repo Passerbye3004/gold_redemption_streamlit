@@ -23,6 +23,13 @@ PAXG_SYMBOL = os.getenv("PAXG_SYMBOL", "PAXGUSDT")
 MIN_GRAMS = 50
 GRAM_STEP = 50
 
+st.title("Debug - Binance Connection")
+try:
+    r = requests.get("https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT", timeout=10)
+    st.success(f"Status: {r.status_code}")
+    st.json(r.json())
+except Exception as e:
+    st.error(f"Failed: {e}")
 # ---------------------- Page Config ----------------------
 st.set_page_config(
     page_title="P100 Gold Redemption",
@@ -134,7 +141,7 @@ def get_paxg_price() -> float:
         r.raise_for_status()
         return float(r.json().get("price", 0.0))
     except Exception:
-        return 4050.0  # fallback
+        return 5050.50  # fallback
 
 
 def verify_mt5_credentials(login: str, password: str) -> dict:
@@ -204,8 +211,8 @@ if st.session_state.step == "login":
 
     with st.form("login_form"):
         st.subheader("Account Verification")
-        login_input = st.text_input("MT5 Login", placeholder="e.g. test")
-        password_input = st.text_input("MT5 Master Password", type="password", placeholder="e.g. master123")
+        login_input = st.text_input("Login", placeholder="e.g. master")
+        password_input = st.text_input("Master Password", type="password", placeholder="e.g. test123")
 
         consent = st.checkbox(
             "I understand and consent to allow P100 Gold to access and verify my MT5 account data for redemption purposes."
